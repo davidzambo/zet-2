@@ -7,6 +7,7 @@ export default class App extends Component {
         return (
             <div className="container-fluid px-0">
               <Navbar/>
+              Ez fika
             </div>
         );
     }
