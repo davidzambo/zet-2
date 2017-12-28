@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Navbar from './admin/Navbar';
 import Upload from './admin/Upload';
-import Warning from './admin/Warning';
+import Informations from './admin/Informations';
 import Categories from './admin/Categories';
 
 
@@ -13,7 +13,7 @@ export default class Administration extends Component {
       this.getCategories = this.getCategories.bind(this);
       this.handleNavbarOnClick = this.handleNavbarOnClick.bind(this);
       this.state = {
-        page: 'welcome',
+        page: 'informations',
         categories: [],
       }
     }
@@ -36,9 +36,9 @@ export default class Administration extends Component {
 
 
     // get the clcked navbar element's href, split it, and set it as a state
-    handleNavbarOnClick(link){
+    handleNavbarOnClick(href){
       this.setState({
-        page: link.split('admin/')[1]
+        page: href.split('admin/')[1]
       });
     }
 
@@ -50,15 +50,13 @@ export default class Administration extends Component {
             page = 'welcome';
             break;
           case 'new_picture':
-            page = <div>
-                      <Upload categories={this.state.categories} refreshCategories={this.getCategories}/>
-                      <Warning/>
-                    </div>
+            page = <Upload categories={this.state.categories} refreshCategories={this.getCategories}/>;
             break;
           case 'categories':
-            page = <div>
-                    <Categories categories={this.state.categories} refreshCategories={this.getCategories}/>
-                  </div>
+            page =  <Categories categories={this.state.categories} refreshCategories={this.getCategories}/>;
+            break;
+          case 'informations':
+            page = <Informations/>;
             break;
         }
 
@@ -66,10 +64,8 @@ export default class Administration extends Component {
             <div>
               <Navbar onClick={this.handleNavbarOnClick}/>
 
-              <main className="container-fluid">
-                <div className="row justify-content-center py-5">
+              <main className="container-fluid mt-4">
                   { page }
-                </div>
               </main>
             </div>
         );

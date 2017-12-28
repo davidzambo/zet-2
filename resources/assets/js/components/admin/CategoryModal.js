@@ -28,26 +28,14 @@ export default class CategoryModal extends Component {
     updateCategory(){
       let category = this.props.details.item;
       category.name = document.getElementById('category_name').value;
-      axios({
-        url: '/api/admin/categories/'+category.id,
-        method: 'put',
-        data: category
-      })
-        .then( () => this.props.details.confirm())
-        .then( () => { return this.toggle() });
+      this.props.details.confirm(category);
+      this.toggle();
     }
 
     createCategory(){
       let name = document.getElementById('category_name').value;
-      axios({
-        url: '/api/admin/categories/',
-        method: 'post',
-        data: {
-          name: name
-        }
-      })
-        .then( () => this.props.details.confirm())
-        .then( () => { return this.toggle() });
+      this.props.details.confirm(name);
+      this.toggle();
     }
 
 

@@ -8,9 +8,10 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="{{mix('css/app.css')}}" rel="stylesheet" type="text/css">
+        <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
     </head>
     <body>
-        <div class="container-fluid px-0 mx-0" id="root"></div>
+        <div id="root"></div>
         <script src="{{mix('js/bootstrap.js')}}" ></script>
         <script src="{{mix('js/administration.js')}}" ></script>
     </body>

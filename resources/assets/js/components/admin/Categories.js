@@ -7,6 +7,8 @@ export default class Categories extends Component {
     constructor(props){
       super(props);
       this.updateCategory = this.updateCategory.bind(this);
+      this.createCategory = this.createCategory.bind(this);
+      this.refreshCategories = this.refreshCategories.bind(this);
       this.cancelUpdate = this.cancelUpdate.bind(this);
       this.destroyCategory = this.destroyCategory.bind(this);
       this.confirmDestroy = this.confirmDestroy.bind(this);
@@ -79,6 +81,8 @@ export default class Categories extends Component {
     }
 
     showCreateOrUpdateCategoryModal(e){
+      // get the datas from parent 'tr'.
+      // if there is no parent 'tr', that means it a new category
       let item = this.setItem(e);
       this.setState({
         update: {
@@ -86,14 +90,14 @@ export default class Categories extends Component {
           isUpdate: (item.id === null) ? false : true,
           item: item,
           cancel: this.cancelUpdate,
-          confirm: this.updateCategory
+          confirm: (item.id === null) ? this.createCategory : this.updateCategory
         }
       });
     }
 
     // As the database has been updated in the categoryModal component
     // we have to re-render the updates
-    updateCategory(){
+    refreshCategories(){
       this.props.refreshCategories();
     }
 
@@ -101,17 +105,27 @@ export default class Categories extends Component {
       return this.setState({ update: {} });
     }
 
-    // addNewCategory(){
-    //   return this.setState({
-    //     update: {
-    //       details: {
-    //         isOpen: true,
-    //         isUpdate: true,
-    //         item: item,
-    //         cancel: this.cancelUpdate,
-    //         confirm: this.updateCategory
-    //       }
-    // }
+    updateCategory(item){
+      console.log(item);
+      axios({
+        url: '/api/admin/categories/'+item.id,
+        method: 'put',
+        data: item
+      })
+        .then( () => this.refreshCategories());
+    }
+
+    createCategory(name){
+      axios({
+        url: '/api/admin/categories/',
+        method: 'post',
+        data: {
+          name: name
+        }
+      })
+        .then( () => this.refreshCategories());
+    }
+
 
     // this function gathers the information of the category item,
     // which should be edited or deleted,
@@ -164,7 +178,8 @@ export default class Categories extends Component {
 
 
       return (
-        <div className="m-4">
+        <div className="row my-4 justify-content-center">
+         <div className="col-12 col-md-10 col-lg-8 col-xl-6">
           <h1>Kategóriák kezelése</h1>
 
           <table className="table table-striped table-hover table-sm">
@@ -188,6 +203,7 @@ export default class Categories extends Component {
           { categoryModal }
 
            <button type="button" className="btn btn-primary" onClick={this.showCreateOrUpdateCategoryModal}>új kategória</button>
+          </div>
         </div>
       );
     }
